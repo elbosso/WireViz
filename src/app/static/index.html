@@ -28,13 +28,21 @@
         <div class="w3-card w3-container" style="min-height:500px">
             <h3>Usage</h3>
             <p>You get a nice PNG image like so:</p>
-            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/wireviz/" -H  "Content-Type: multipart/form-data" -H "accept: image/png" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.png</div>
+            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/render/" -H  "Content-Type: multipart/form-data" -H "accept: image/png" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.png</div>
             <p>You get a nice SVG image like so:</p>
-            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/wireviz/" -H  "Content-Type: multipart/form-data" -H "accept: image/svg+xml" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.svg</div>
+            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/render/" -H  "Content-Type: multipart/form-data" -H "accept: image/svg+xml" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.svg</div>
             <p>If there is no preference specified - the result will be a nice PNG image:</p>
-            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/wireviz/" -H  "Content-Type: multipart/form-data" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.png</div>
+            <div class="w3-panel w3-leftbar w3-sand w3-tiny w3-mono">curl -X POST "http://&lt;host&gt;:&lt;port&gt;/render/" -H  "Content-Type: multipart/form-data" -F "yml_file=@&lt;input_file&gt;.yml;type=application/x-yaml" -o &lt;output_file&gt;.png</div>
             <p>If you want, you can also play around with the <a
             href="/wsgi/doc/">Swagger UI!</a></p>
+            <p>The application also offers two endpoints for using the GET HTTP method - you can explore them with the
+            <a href="/wsgi/doc/">Swagger UI</a> too. However - you need to encode the source files first. To do so, you can use
+            any of the resources on  the internet providing the mechanisms for the encoding used for
+            <a href="https://plantuml.com">PlantUML</a> for example for
+            <a href="https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml">Java</a> (net.sourceforge.plantuml.code.Transcoder) or
+            <a href="https://gist.github.com/ryardley/64816f5097003a35f9726aab676920d0">Python.</a></p>
+            <p>One example for such an encoded form would be:</p>
+            <div style="overflow-x: scroll" class="w3-panel w3-bottombar w3-sand w3-tiny w3-mono">ZLF1Rfj04Btp5IDLwY6595v0bL0kZLrPaHjRYXFRbOKim0jU2NRfiZJrR_KJycMP1KomBHHVLkpiUszctWoAPdaQA5fuy0MsD6QSyGJK8GfAG4YXBEWMT422u0Q01LypaT9_cnWl06gVKmyUTGGc4o2kKuMBCgnVOfe5AQrvaU0RHg8Aa3CkIkN1UZmTcV3DNPWm7_x2O_J3hz6lJD8M7c41YP1x3yAIRoj1W2Ge4qnnUprm8Cj83HIfaDZH-dvYmXDA__vfmdZg6qPCfInJx1PnpVScaYpBlKuZGnquF1ztSdjDN4ppzjymi15E8wKJ8MOrg1NkxZouQhn1HoEHxxMX31qj89OY0xMZhR-VkM32uyDyXkTi_g2ZsCxqPgYzMP7pV1-1ncGiW2bW1UIYA5YOKZrENL9TIIOaHdO1nw4UrRIoBn3NEAS7TzBIW2pEEi5XH47OZ6BPTUzevYdbYTfLnjUJs8dN3VrJihyUA5dgQfVaSxBJIsvQlNYtFZJjyrsxVp5XDZPXyUpt9cmyQxMhXRf0-sdKetdOH2PuPQPLmIozah0UM8xVt9SdTroXzjxB8ISSkuzZkjRtbcMVi9mAOLjkbtVq_nsODP9qSTrOHutuxm00</div>
         </div>
     </div>
 
@@ -46,7 +54,7 @@
         </div>
         <div class="w3-card-padding w3-container">
             <h3>Request PNG...</h3>
-            <form action="/wsgi/wireviz/" method="post" enctype="multipart/form-data">
+            <form action="/wsgi/render/" method="post" enctype="multipart/form-data">
                 <div class="w3-row-padding w3-margin-top"><input name="yml_file" type="file" accept="application/x-yaml"></div>
                 <div class="w3-row-padding w3-margin-top"><input type="submit" title="Request PNG rendering" value="Request PNG rendering"/></div>
             </form>

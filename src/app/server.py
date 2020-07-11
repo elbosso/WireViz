@@ -6,6 +6,7 @@ from flask_restplus import Resource, reqparse
 import werkzeug
 import tempfile
 from wireviz import wireviz
+from app import plant_uml_decoder
 
 file_upload = reqparse.RequestParser()
 file_upload.add_argument('yml_file',
@@ -14,7 +15,7 @@ file_upload.add_argument('yml_file',
                          required=True,
                          help='YAML file')
 ns = api.namespace('', description='wireviz server')
-@ns.route('/wireviz/')
+@ns.route('/render/')
 class Render(Resource):
     @api.expect(file_upload)
     @ns.produces(['image/png', 'image/svg+xml'])
@@ -40,6 +41,57 @@ class Render(Resource):
                 mimetype='image/svg+xml'
                 resultfilename="%s%s" % (filename, '.svg')
             wireviz.parse(yaml_input, file_out=fon)
+            return send_file(outputname,
+                                     as_attachment=True,
+                                     attachment_filename=resultfilename,
+                                     mimetype=mimetype)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({
+                'message': 'internal error',
+                'exception': str(e)
+            }), 500)
+@ns.route('/png/<encoded>')
+@ns.param('encoded', 'encoded script like plantuml uses')
+class PNGRender(Resource):
+    @ns.produces(['image/png'])
+    def get(self,encoded):
+        """
+        """
+        try:
+            file_out=tempfile.NamedTemporaryFile()
+            fon="%s%s" % (file_out.name, '.png')
+            outputname = "%s%s" % (fon, '.png')
+            resultfilename="%s%s" % ('png_rendered', '.png')
+            mimetype='image/png'
+            wireviz.parse(plant_uml_decoder.plantuml_decode(encoded), file_out=fon)
+            return send_file(outputname,
+                                     as_attachment=True,
+                                     attachment_filename=resultfilename,
+                                     mimetype=mimetype)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({
+                'message': 'internal error',
+                'exception': str(e)
+            }), 500)
+
+@ns.route('/svg/<encoded>')
+@ns.param('encoded', 'encoded script like plantuml uses')
+class SVGRender(Resource):
+    @ns.produces(['image/sgv+xml'])
+    def get(self,encoded):
+        """
+        """
+        try:
+            file_out=tempfile.NamedTemporaryFile()
+            fon="%s%s" % (file_out.name, '.svg')
+            outputname = "%s%s" % (fon, '.svg')
+            resultfilename="%s%s" % ('svg_rendered', '.svg')
+            mimetype='image/svg+xml'
+            print('/svg/<encoded>')
+            print(resultfilename)
+            wireviz.parse(plant_uml_decoder.plantuml_decode(encoded), file_out=fon)
             return send_file(outputname,
                                      as_attachment=True,
                                      attachment_filename=resultfilename,
