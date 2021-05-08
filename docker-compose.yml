@@ -7,10 +7,15 @@ services:
 #      - "8086:80"
     restart: unless-stopped
     labels:
-      - "traefik.backend=wireviz"
       - "traefik.enable=true"
-      - "traefik.http.routers.wekan.rule=Host(`wireviz.docker.lab`)"
-      - "traefik.http.services.wekan.loadbalancer.server.port=80"
+      - "traefik.http.routers.wireviz-http.entrypoints=http"
+      - "traefik.http.routers.wireviz-http.rule=Host(`wireviz.docker.lab`)"
+#      - "traefik.http.routers.wireviz-http.middlewares=wireviz-https"
+      - "traefik.http.services.wireviz-http.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.wireviz-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.wireviz.entrypoints=https"
+      - "traefik.http.routers.wireviz.rule=Host(`wireviz.docker.lab`)"
+      - "traefik.http.routers.wireviz.tls=true"
       - "traefik.docker.network=traefik_proxy"
     networks:
       - traefik_proxy
